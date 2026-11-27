@@ -1,0 +1,39 @@
+
+name: RISE TO LEGEND - Build
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get project files
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build game
+        run: npm run build
+
+      - name: Upload game files
+        uses: actions/upload-artifact@v4
+        with:
+          name: rise-to-legend-web-dist
+          path: dist/
+          if-no-files-found: error
+          
